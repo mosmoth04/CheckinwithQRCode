@@ -1,0 +1,718 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML xmlns:mso="urn:schemas-microsoft-com:office:office" xmlns:msdt="uuid:C2F41010-65B3-11d1-A29F-00AA00C14882"><HEAD>
+<META http-equiv=Content-Type content="text/html; charset=windows-874">
+
+<!--<SCRIPT src="Semulator_files/date.js"></SCRIPT>-->
+
+
+
+<SCRIPT language=javascript>
+var xmlHttp;
+var q;
+var trg;
+var fi;
+var str;
+var fr;
+var aField = new Array(45);
+aField[0]  = null;
+aField[1]  = {fName:"Account No" ,fType:"N",fLength:10,fDec:0,fDefault:0};
+aField[2]  = {fName:"Old Balance",fType:"N",fLength:13,fDec:2,fDefault:0};
+aField[3]  = {fName:"Old Balance",fType:"N",fLength:13,fDec:2,fDefault:0};
+aField[4]  = {fName:"Cheque Type",fType:"N",fLength:2,fDec:0,fDefault:0};
+aField[5]  = {fName:"Reason Code",fType:"N",fLength:2,fDec:0,fDefault:0};
+aField[6]  = {fName:"Cheque No." ,fType:"N",fLength:8,fDec:0,fDefault:1};
+aField[7]  = {fName:"Bill Code"  ,fType:"N",fLength:3,fDec:0,fDefault:0};
+aField[8]  = {fName:"Deposit No" ,fType:"N",fLength:3,fDec:0,fDefault:0};
+aField[9]  = {fName:"Amount"     ,fType:"N",fLength:13,fDec:2,fDefault:1};
+aField[10] = {fName:"Transaction",fType:"N",fLength:3,fDec:0,fDefault:0};
+aField[11] = {fName:"Date Tran"  ,fType:"D",fLength:6,fDec:0,fDefault:0};
+aField[12] = {fName:"Interest"   ,fType:"N",fLength:14,fDec:0,fDefault:0};
+aField[13] = null;
+aField[14] = {fName:"IRGN Type"  ,fType:"C",fLength:1,fDec:0,fDefault:['1','2','3','4','5']};
+aField[15] = {fName:"IRGN From"  ,fType:"C",fLength:35,fDec:0,fDefault:['Tester']};
+aField[16] = {fName:"IRGN Desc"  ,fType:"C",fLength:45,fDec:0,fDefault:['Testing']};
+aField[17] = {fName:"Commission" ,fType:"N",fLength:11,fDec:2,fDefault:0};
+aField[18] = {fName:"Charge Fee" ,fType:"N",fLength:11,fDec:2,fDefault:0};
+aField[19] = null;
+aField[20] = {fName:"Authorlize ID",fType:"N",fLength:7,fDec:0,fDefault:0};
+aField[21] = null;
+aField[22] = null;
+aField[23] = null;
+aField[24] = null;
+aField[25] = null;
+aField[26] = null;
+aField[27] = {fName:"Next Seq"    ,fType:"N",fLength:3,fDec:0,fDefault:999};
+aField[28] = {fName:"Branch No"   ,fType:"N",fLength:4,fDec:0,fDefault:0};
+aField[29] = {fName:"Inq Next key",fType:"C",fLength:20,fDec:0,fDefault:' '};
+aField[30] = null;				 
+aField[31] = {fName:"Pay No Pay"   ,fType:"N",fLength:4,fDec:0,fDefault:0};
+aField[32] = {fName:"Int Adjust"   ,fType:"N",fLength:13,fDec:2,fDefault:0};
+aField[33] = {fName:"IRGN Pay Type",fType:"C",fLength:1,fDec:0,fDefault:['C','T']};
+aField[34] = {fName:"Branch Total" ,fType:"N",fLength:4,fDec:0,fDefault:0};
+aField[35] = {fName:"Teller Total" ,fType:"N",fLength:7,fDec:0,fDefault:0};
+aField[36] = {fName:"Cr Account"   ,fType:"N",fLength:10,fDec:0,fDefault:0};
+aField[37] = {fName:"Partial Flag" ,fType:"C",fLength:1,fDec:0,fDefault:['F','P']};
+aField[38] = {fName:"Service Code" ,fType:"N",fLength:2,fDec:0,fDefault:['01','02','03','04','05','06','07','08','09','10','11','12','13','14','15','16']};
+aField[39] = {fName:"Description"  ,fType:"C",fLength:10,fDec:0,fDefault:' '};
+aField[40] = null;				 
+aField[41] = null;
+aField[42] = null;
+aField[43] = null;
+aField[44] = null;
+
+
+
+function showCD(str){ 
+xmlHttp=GetXmlHttpObject();
+if (xmlHttp==null)
+  {
+  alert ("Your browser does not support AJAX!");
+  return;
+  } 
+var url="getcd.asp";
+url=url+"?q="+str;
+url=url+"&sid="+Math.random();
+xmlHttp.onreadystatechange=stateChanged;
+xmlHttp.open("GET",url,true);
+xmlHttp.send(null);
+}
+
+function stateChanged() 
+{ 
+if (xmlHttp.readyState==4)
+{ 
+document.getElementById("txtHint").innerHTML=xmlHttp.responseText;
+}
+}
+
+function GetXmlHttpObject()
+{
+var xmlHttp=null;
+try
+  {
+  // Firefox, Opera 8.0+, Safari
+  xmlHttp=new XMLHttpRequest();
+  }
+catch (e)
+  {
+  // Internet Explorer
+  try
+    {
+    xmlHttp=new ActiveXObject("Msxml2.XMLHTTP");
+    }
+  catch (e)
+    {
+    xmlHttp=new ActiveXObject("Microsoft.XMLHTTP");
+    }
+  }
+return xmlHttp;
+}
+
+function importXML(str)
+{
+	if (document.implementation && document.implementation.createDocument)
+	{
+		xmlDoc = document.implementation.createDocument("", "", null);
+		xmlDoc.onload = init;
+	}
+	else if (document.documentElement && document.documentElement.applyElement)
+	{
+		xmlDoc = new ActiveXObject("Microsoft.XMLDOM");
+		xmlDoc.onreadystatechange = tmp;
+ 	}
+	else
+	{
+		alert('Your browser can\'t handle this script');
+		return;
+	}
+	xmlDoc.load(str);
+}
+
+function tmp()
+{
+	if (xmlDoc.readyState == 4) init();
+}
+
+function init()
+{
+	if (fi == null) {
+	//	var x = xmlDoc.getElementsByTagName('CD');
+	//	var x = xmlDoc.selectNodes("/CATALOG/CD[ARTIST='" + q + "']");
+		var x = xmlDoc.selectNodes("/TRANSACTION/ACCOUNT_TYPE[@id='" + q + "']");
+
+	//	var newEl = document.createElement('TABLE');
+	//	newEl.setAttribute('id',"AreaOut");
+	//	newEl.setAttribute('cellPadding',5);
+	//	var tmp = document.createElement('TBODY');
+	//	newEl.appendChild(tmp);
+	//	var row = document.createElement('TR');
+
+		var slist = document.getElementById('trancode');
+		for (j=0;j<x[0].childNodes.length;j++)
+		{
+			if (x[0].childNodes[j].nodeType != 1) continue;
+			var trs = x[0].childNodes[j].attributes;
+			if (trg == null) {
+				var o = document.createElement('OPTION');
+				var t = document.createTextNode(trs.getNamedItem("id").value + ' - ' + trs.getNamedItem("desc").value);
+				o.setAttribute('value',trs.getNamedItem("id").value);
+				o.appendChild(t);
+				slist.appendChild(o);
+			} else {
+				if (trs.getNamedItem("type").value == 'TRGN') {
+					var o = document.createElement('OPTION');
+					var t = document.createTextNode(trs.getNamedItem("id").value + ' - ' + trs.getNamedItem("desc").value);
+					o.setAttribute('value',trs.getNamedItem("id").value);
+					o.appendChild(t);
+					slist.appendChild(o);
+				}
+			}
+		}
+	//	tmp.appendChild(row);
+
+	//	for (j=0;j<x[0].childNodes.length;j++)
+	//	{
+	//		if (x[0].childNodes[j].nodeType != 1) continue;
+	//		var container = document.createElement('TH');
+	//		var theData = document.createTextNode(x[0].childNodes[j].nodeName);
+	//		container.appendChild(theData);
+	//		row.appendChild(container);
+	//	}
+	//	tmp.appendChild(row);
+	//	for (i=0;i<x.length;i++)
+	//	{
+	//		var row = document.createElement('TR');
+	//		for (j=0;j<x[i].childNodes.length;j++)
+	//		{
+	//			if (x[i].childNodes[j].nodeType != 1) continue;
+	//			var container = document.createElement('TD');
+	//			var theData = document.createTextNode(x[i].childNodes[j].firstChild.nodeValue);
+	//			container.appendChild(theData);
+	//			row.appendChild(container);
+	//		}
+	//		tmp.appendChild(row);
+	//	}
+	//    document.getElementById('workArea').appendChild(newEl);
+	} else {
+		var xc = xmlDoc.selectNodes("/TRANSACTION/ACCOUNT_TYPE[@id='" + q + "']/TRANCODE[@id='" + fi + "']");
+		var cg = document.getElementById("areashowfield");
+		var fg = document.getElementById("areashowformat");
+		if (fg!=null) cg.removeChild(fg);
+		fg = document.createElement('div');
+		var divIdName = 'areashowformat';
+		fg.setAttribute('id',divIdName);
+		cg.appendChild(fg);
+
+		var newEl = document.createElement('TABLE');
+		newEl.setAttribute('id',"AreaOut");
+		newEl.setAttribute('cellPadding',1);
+		var tmp = document.createElement('TBODY');
+		newEl.appendChild(tmp);
+
+		if (fr == null)  fr=0;		
+		var frmt = "";
+		for (j=0;j<xc[0].childNodes.length;j++)
+		{
+			if (xc[0].childNodes[j].nodeType != 1) continue;
+			if (xc[0].childNodes.length > 1) { 
+				if (fr == j) {	frmt = frmt + "#"+ (j+1) + "&nbsp;" ;
+				} else {		frmt = frmt + "<a href='#' onclick='fr="+(j)+"; LoadField(trancode.value)'>#"+ (j+1) + "</a>&nbsp;" ;
+				}
+			}
+			if (xc[0].childNodes.length == 1)  fr=0;		
+			if (fr==j){
+				var trs = xc[0].childNodes[fr];
+				for (k=0;k<trs.childNodes.length;k++){
+					var row = document.createElement('TR');
+					var container = document.createElement('TD');
+					
+					var fno = (+trs.childNodes[k].firstChild.nodeValue);
+					var theLabel = document.createTextNode(aField[fno].fName);	
+
+					container.appendChild(theLabel);
+					row.appendChild(container);
+					container = document.createElement('TD');
+
+//					var theField = document.createElement('input');
+//					var tname = 'field[' + k + ']';
+//					theField.setAttribute('id',tname);
+//					theField.setAttribute('maxLength',aField[fno].fLength);
+//					theField.setAttribute('width',(aField[fno].fLength * 10));
+	
+					var actno  = aField[fno].fType + trs.childNodes[k].firstChild.nodeValue;
+					var tactno = aField[fno].fType + trs.childNodes[k].firstChild.nodeValue;
+
+					if (aField[fno].fDefault.length == null || aField[fno].fDefault.length == 1) {
+						var theField = "<input type='text' name='" + actno + "' maxlength='" + aField[fno].fLength + "' ";
+						var fvalue = "";
+						switch (aField[fno].fType){
+						case 'N': 
+								fvalue = String(aField[fno].fDefault);
+								var lead = aField[fno].fLength - fvalue.length;
+								for (ii=0;ii<lead;ii++){  fvalue = '0' + fvalue;}
+								if (aField[fno].fDec != 0){
+									fvalue = fvalue.substr(0,aField[fno].fLength-aField[fno].fDec) + '.' + fvalue.substr(aField[fno].fLength-aField[fno].fDec);
+								}
+								break;
+						case 'D':
+								fvalue = formatDate(new Date(),"ddMMyy");
+								break;
+						default:
+								fvalue = aField[fno].fDefault;
+								var lead = aField[fno].fLength - fvalue.length;
+								for (ii=0;ii<lead;ii++){  fvalue = fvalue + ' ';}
+						}
+						theField = theField + "value='"+ fvalue +"' ";
+						var fwidth = aField[fno].fLength;
+						if (aField[fno].fLength < 3) {fwidth = 3;}
+						var align = '';
+						if (aField[fno].fType == 'N') align = ';text-align:right';
+						theField = theField + "style='width:" + (fwidth * 10) + align + "' ";
+						theField = theField + "id='Field' ";
+						theField = theField + "onblur='Maskup(this,\"" + aField[fno].fType + "\"," + aField[fno].fLength + "," + aField[fno].fDec + "," + tactno + ")' ";
+						theField = theField + "onfocus='Lookin(this," + tactno + ",\"" + aField[fno].fType + "\")' ";
+						if (aField[fno].fType == "C") { theField = theField + ">"; }
+						else { 	theField = theField + "onkeypress='return isNumbers(event,"+aField[fno].fDec+",this);'>";}		
+					} else {
+						var theField = "<SELECT NAME='"+ actno +"' id='Field'>";
+						for(jj=0;jj<aField[fno].fDefault.length;jj++){
+							var sele = "";
+							if (jj == 0) sele = " SELECTED";
+							theField = theField + "<OPTION VALUE='"+ aField[fno].fDefault[jj] + "'" + sele + ">"+ aField[fno].fDefault[jj] +"</OPTION>";
+						}
+						theField = theField + "</SELECT>";
+					}
+
+
+//					alert(theField);
+					container.innerHTML = theField;
+//					container.appendChild(theField);
+					row.appendChild(container);
+					tmp.appendChild(row);
+				}
+			}
+		}
+
+		if (trg != null) {
+			for (k=14;k<20;k++){
+				if (k == 19) k = 33;
+				var row = document.createElement('TR');
+				var container = document.createElement('TD');
+				var theLabel = document.createTextNode(aField[k].fName);	
+
+				container.appendChild(theLabel);
+				row.appendChild(container);
+				container = document.createElement('TD');
+				
+
+				var actno  = aField[k].fType + '0' + k;
+				var tactno = aField[k].fType + '0' + k;
+				if (aField[k].fDefault.length == null || aField[k].fDefault.length == 1) {
+					var theField = "<input type='text' name='" + actno + "' maxlength='" + aField[k].fLength + "' ";
+					var fvalue = "";
+
+					switch (aField[k].fType){
+					case 'N': 
+							fvalue = String(aField[k].fDefault);
+							var lead = aField[k].fLength - fvalue.length;
+							for (ii=0;ii<lead;ii++){  fvalue = '0' + fvalue;}
+							if (aField[k].fDec != 0){
+								fvalue = fvalue.substr(0,aField[k].fLength-aField[k].fDec) + '.' + fvalue.substr(aField[k].fLength-aField[k].fDec);
+							}
+							break;
+					case 'D':
+							fvalue = formatDate(new Date(),"ddMMyy");
+							break;
+					default:
+							fvalue = aField[k].fDefault;
+							var lead = aField[k].fLength - fvalue.length;
+							for (ii=0;ii<lead;ii++){  fvalue = fvalue + ' ';}
+					}
+					theField = theField + "value='"+ fvalue +"' ";
+					var fwidth = aField[k].fLength;
+					if (aField[k].fLength < 3) {fwidth = 3;}
+					theField = theField + "style='width:" + (fwidth * 10) + "' ";
+					theField = theField + "id='Field' ";
+					theField = theField + "onblur='Maskup(this,\"" + aField[k].fType + "\"," + aField[k].fLength + "," + aField[k].fDec + "," + tactno + ")' ";
+					theField = theField + "onfocus='Lookin(this," + tactno + ",\"" + aField[k].fType + "\")' ";
+					if (aField[k].fType == "C") { theField = theField + ">"; }
+					else { 	theField = theField + "onkeypress='return isNumbers(event," + aField[k].fDec + ",this);'>";}
+				} else {
+					var theField = "<SELECT NAME='"+ actno +"' id='Field'>";
+					for(jj=0;jj<aField[k].fDefault.length;jj++){
+						var sele = "";
+						if (jj == 0) sele = " SELECTED";
+						theField = theField + "<OPTION VALUE='"+ aField[k].fDefault[jj] + "'" + sele + ">"+ aField[k].fDefault[jj] +"</OPTION>";
+					}
+					theField = theField + "</SELECT>";
+				}
+
+				container.innerHTML = theField;
+				row.appendChild(container);
+				tmp.appendChild(row);
+			}
+		}
+
+		if (frmt != "") { 
+			var t = document.createTextNode("Format :");
+			fg.appendChild(t);
+			fg.appendChild(t);
+			fg.innerHTML = fg.innerHTML + frmt;
+		}
+		fr=null;
+		cg.appendChild(newEl);
+		var theButton = document.createElement('input');	
+		tname = 'Generate';
+		theButton.setAttribute('id',tname);
+		theButton.setAttribute('name',tname);
+		theButton.setAttribute('value',tname);
+		theButton.setAttribute('type','button');
+		theButton.setAttribute('width','100');
+		theButton.onclick = funArg(Generate,"this.value");
+		var row = document.createElement('TR');
+		var container = document.createElement('TD');
+		row.appendChild(container);
+		var container = document.createElement('TD');
+		container.appendChild(theButton);
+		row.appendChild(container);
+		tmp.appendChild(row);
+	}
+}
+
+function showCD_(str){ 
+	q = str;
+	var d  = document.getElementById('writeroot');
+	var wd = document.getElementById('AreaOut');
+	if (wd != null)d.removeChild(wd);
+	importXML("cd_catalog.xml");
+}
+
+function CheckType(str){
+	var ctype = str.substr(3,1);
+	var dtype
+	switch (ctype){
+		case '1' :	dtype = 'SN';
+					break;
+		case '2' :
+		case '6' :  dtype = 'FA';
+					break;
+		case '3' :	dtype = 'CA';
+					break;
+		default  :  dtype = 'SA';
+	}
+	var ni = document.getElementById('showtype');
+	var olddiv = document.getElementById('Showit');
+	if (olddiv!=null) ni.removeChild(olddiv);
+	var newdiv = document.createElement('label');
+	var divIdName = 'Showit';
+	newdiv.setAttribute('id',divIdName);
+	newdiv.innerHTML = dtype;
+	newdiv.value = dtype;
+	ni.appendChild(newdiv);
+}
+
+function Maskup(vorg,vtype,vlen,vdec,vtmp){
+	vtmp.value = vorg.value;
+	switch (vtype)	{
+	case 'D'	:	
+	case 'N'	:	
+			vorg.value = vorg.value.replace('.',""); 
+			while (vorg.value.search(',') != -1){
+				vorg.value = vorg.value.replace(',',""); 
+			}
+			
+			var leading = vlen - vorg.value.length;
+			for (i=0;i<leading;i++){  vorg.value = '0' + vorg.value;}
+			if (vdec != 0){
+				vorg.value = vorg.value.substr(0,vlen-vdec) + '.' + vorg.value.substr(vlen-vdec);
+			}
+			break;
+	case 'C' :
+			var leading = vlen - vorg.value.length;
+			for (i=0;i<leading;i++){  vorg.value = vorg.value + ' ';}
+			break;
+	default:
+			break;
+	}
+	return vorg.value;
+}
+
+function Lookin(msk,org,ctype){
+	if (msk==org) {
+		if (ctype=="N") { 
+			org.value = org.value.replace('.',""); 
+			while (org.value.search(',') != -1){
+				org.value = org.value.replace(',',""); 
+			}
+			org.value = (+org.value);
+		}else{
+			org.value = org.value.replace(/^\s+|\s+$/g, '');
+		}
+	}
+	msk.value = org.value;
+	msk.select();
+}
+
+
+function isNumbers(e,dec,objD)
+{
+	var keynum;
+	var keychar;
+	var numcheck;
+	var keynum = (window.event) ? e.keyCode: e.which;
+	var thereturn;
+/*
+	if(window.event) {// IE
+		keynum = e.keyCode
+	}else if(e.which) {// Netscape/Firefox/Opera
+		keynum = e.which
+	}
+*/
+	numcheck = /\d/
+	keychar = String.fromCharCode(keynum);
+	thereturn  = numcheck.test(keychar);
+	if (objD!= null && thereturn)	{
+		if (dec == 0) {
+			if (String(+objD.value).length >= objD.maxLength) { return false; }
+			objD.value = LeadingZero(String(+objD.value) + keychar,objD.maxLength);
+		} else {
+			var value = objD.value.replace('.',""); 
+			while (value.search(',') != -1){
+				value  = value.replace(',',"");
+			}
+			if (value.length < dec+2) value = String(+value);
+			if (value.length >= objD.maxLength) return false;
+			value += keychar;
+			if (value.length <= dec) {
+				value = '0.' + LeadingZero(value,dec);
+			} else {
+				var intvalue = value.substr(0,value.length - dec);
+				var mv = '';
+				var decvalue = value.substr(value.length - dec,dec);
+				for (i=0;i<intvalue.length;i++){
+					if (((i % 3) == 0) && (i != 0)) mv = ',' + mv;
+					mv = intvalue.charAt(intvalue.length - i - 1) + mv; 
+				}
+				value = mv + '.' + decvalue;
+			}
+			objD.value = value;
+			return false;
+		}
+	}
+	return thereturn;
+}
+
+function LeadingZero(txt,lng){
+	var rtxt = '';
+	var xf = (+lng) - txt.length;
+	for (i=0; i<xf;i++){
+		rtxt += '0';
+	}
+	rtxt += txt;
+	return rtxt;
+}
+
+function LoadList(str){
+	CheckType(str);
+	document.getElementById('actno').value = str;
+	var vdiv = document.getElementById('workArea');
+
+	var sdiv = document.getElementById('areashowList');
+	if (sdiv != null) vdiv.removeChild(sdiv);
+	var newdiv = document.createElement('div');
+	var divIdName = 'areashowList';
+	newdiv.setAttribute('id',divIdName);
+	vdiv.appendChild(newdiv);
+
+	var sTranList = document.createElement('select');
+	var lTranList = document.createElement('label');
+	lTranList.setAttribute('id','labelSelect');
+	lTranList.innerHTML = 'Transaction Code: ';
+	sTranList.setAttribute('name', 'trancode');
+	sTranList.setAttribute('id', 'trancode');
+	sTranList.onchange = funArg(LoadField,"this.value");
+	var o = document.createElement('OPTION');
+	var t = document.createTextNode('Select Transaction');
+	o.setAttribute('value','0');
+	o.appendChild(t);
+	sTranList.appendChild(o);
+	newdiv.appendChild(lTranList);
+	newdiv.appendChild(sTranList);	
+	q = document.getElementById("Showit").value;
+	trg = document.getElementById("TranHeader").value;
+	if (trg != "TRGN") trg = null;
+	fi = null;
+	importXML('transaction.xml');
+	sTranList.focus();
+}
+
+function LoadField(str){
+	var txncode = document.getElementById('trancode').value;
+	var vdiv = document.getElementById('areashowList');
+	var sdiv = document.getElementById('areashowfield');
+	if (sdiv != null) vdiv.removeChild(sdiv);
+	var newdiv = document.createElement('div');
+	var divIdName = 'areashowfield';
+	newdiv.setAttribute('id',divIdName);
+	vdiv.appendChild(newdiv);
+	fi = str;
+	importXML('transaction.xml');
+}
+
+function Generate(str){
+	var tHeader = document.getElementById('TranHeader');
+	var tTerm   = document.getElementById('Terminal');
+	var tSeq    = document.getElementById('Serail');
+	var tTell   = document.getElementById('TellerId');
+	var tProc   = document.getElementById('Branch_No');
+	var tTrancd = document.getElementById('trancode');
+	var tAcctno = document.getElementById('actno');
+	var tAuthor = document.getElementById('Authorize');
+	var tAType  = document.getElementById('Showit');
+	
+	var sorce = 'T';
+	var rebid = '0';
+	var aut   = '';
+	if (tAuthor.checked) {
+		var tAuthorId = document.getElementById('AuthorId');
+		rebid = '3';
+		aut = '^020' + tAuthorId.value; 
+	}
+	if (tHeader == 'TRGN') { sorce = 'K';}
+	var MsgXMN = tHeader.value + ' ' + tHeader.value + 'C1' + tTerm .value + tSeq.value + 'D0' + tProc.value + ' ';
+	MsgXMN = MsgXMN + 'LACA^019' + tTell.value + '^030' + rebid + '^010' + tTrancd.value + '^024' + sorce + '^001' + tAcctno.value + aut;
+
+	var vFld = document.getElementById('Field');
+	while ((vFld = document.getElementById('Field')) != null) {
+		vFld.setAttribute('id','Field2');
+		var nFld = vFld.name.substr(1,3);
+		var dFld = vFld.value;
+		if (vFld.name.substr(0,1) == 'N') { 
+			dFld = vFld.value.replace('.',''); 
+			while (vFld.value.search(',') != -1){
+				dFld  = dFld.value.replace(',',"");
+			}
+			dFld = LeadingZero(dFld,aField[(+nFld)].fLength);
+		}
+		MsgXMN = MsgXMN + '^' + nFld + dFld;
+//		alert(vFld.name + ' ' + vFld.value);
+	}
+	if (tAType.innerHTML == "SN") { MsgXMN = MsgXMN + "^008001"; }
+	while ((vFld = document.getElementById('Field2')) != null) {
+		vFld.setAttribute('id','Field');
+	}
+	var sdiv = document.getElementById('areashowfield');
+	var vdiv = document.getElementById('areashowOutput');
+	if (vdiv != null) sdiv.removeChild(vdiv);
+	var newdiv = document.createElement('div');
+	var divIdName = 'areashowOutput';
+	newdiv.setAttribute('id',divIdName);
+	newdiv.setAttribute('font','Courier New');
+	sdiv.appendChild(newdiv);
+	newdiv.appendChild(document.createElement('hr'));
+	var Line = 0;
+	var nLine = "";
+	while (MsgXMN.length >= Line * 80){
+		var oLine = MsgXMN.substr(Line*80,80);
+//		newdiv.appendChild(document.createTextNode(oLine));
+//		newdiv.appendChild(document.createElement('br'));
+		nLine = nLine + oLine + "\n\r";
+		Line++;
+	}
+//	newdiv.appendChild(document.createElement('hr'));
+//	newdiv.appendChild(document.createTextNode(nLine));
+	var sTranM = document.createElement('textarea');
+	sTranM.setAttribute('name', 'transmission');
+	sTranM.setAttribute('id', 'transmission');
+	sTranM.cols = 100;
+	sTranM.rows = 8;
+	sTranM.value = nLine;
+	newdiv.appendChild(sTranM);
+	sendToClipboard(sTranM.value);
+	seq = (+tSeq.value);
+	seq++;
+	vse = String(seq);
+	lse = (4 - vse.length)
+	for (jk=0;jk<lse;jk++){ vse = '0' + vse; }
+	tSeq.value = vse;
+}
+
+function funArg(fn, arg) {
+  return function () { return fn(eval(arg)); };
+}
+
+function sendToClipboard(s)
+{
+  if( window.clipboardData && clipboardData.setData )
+  {
+	 clipboardData.setData("Text", s);
+  }
+  else
+  {
+	 alert("Internet Explorer required");
+  }
+}
+
+function isArray(obj) {
+   if (obj.constructor.toString().indexOf("Array") == -1)
+      return false;
+   else
+      return true;
+}
+
+function NeedAuthorize(shown){
+	var darea = document.getElementById('AreaAuthor');
+	var inp  = document.getElementById('AuthorId');
+	var tinp = document.getElementById('tAuthorId');
+	if (inp != null) {
+		darea.removeChild(inp);
+		darea.removeChild(tinp);
+	}
+	if (shown) {
+		var inpchk = "<input type='text' name='AuthorId' value='0118021' maxlength=7 onchange='Maskup(this,\"N\",7,0,tAuthorId)' onblur='Maskup(this,\"N\",7,0,tAuthorId)'  onfocus='Lookin(this,tAuthorId,\"N\")' style='width:80;visibled:false'><input type='hidden' name='tAuthorId' value='118021'>";
+		darea.innerHTML = darea.innerHTML + inpchk;
+	}
+}
+</SCRIPT>
+
+<META content="MSHTML 6.00.5730.11" name=GENERATOR>
+<!--[if gte mso 9]><xml>
+<mso:CustomDocumentProperties>
+<mso:MediaServiceImageTags msdt:dt="string"></mso:MediaServiceImageTags>
+<mso:lcf76f155ced4ddcb4097134ff3c332f msdt:dt="string"></mso:lcf76f155ced4ddcb4097134ff3c332f>
+<mso:TaxCatchAll msdt:dt="string"></mso:TaxCatchAll>
+</mso:CustomDocumentProperties>
+</xml><![endif]-->
+</HEAD>
+<BODY>
+<FORM><LABEL>Tran:</LABEL><SELECT 
+onchange="LoadList(Maskup(actno,'N',10,0,tactno))" name=TranHeader> <OPTION 
+  value=TM01 selected>TM01</OPTION> <OPTION value=TU01>TU01</OPTION> <OPTION 
+  value=TRGN>TRGN</OPTION></SELECT> <LABEL for=tel_id>Teller Id:</LABEL> <INPUT id=tel_id 
+onblur="Maskup(this,'N',7,0,tTellerId)" style="WIDTH: 80px" 
+onfocus='Lookin(this,this,"N")' maxLength=7 
+onkeypress="return isNumbers(event);" 
+onchange="Maskup(this,'N',7,0,tTellerId)" value=0118025 name=TellerId ><INPUT 
+type=hidden value=118025 name=tTellerId> <LABEL for=term_id>Terminal No:</LABEL> <INPUT id=term_id 
+onblur="Maskup(this,'C',6,0,tTerminal)" style="WIDTH: 80px" 
+onfocus='Lookin(this,this,"C")' maxLength=6 
+onchange="Maskup(this,'C',6,0,tTerminal)" value=011825 name=Terminal><INPUT 
+type=hidden value=011825 name=tTerminal> <LABEL for=serial_id>Serial No:</LABEL> <INPUT id=serial_id 
+onblur="Maskup(this,'N',4,0,tSerial)" style="WIDTH: 180px" 
+onkeypress="return isNumbers(event,0,this);" 
+onfocus='Lookin(this,this,"N")' maxLength=4 onchange="Maskup(this,'N',4,0,tSerial)" 
+value=0001 name=Serail><INPUT type=hidden value=1 name=tSerial> <LABEL>Process 
+Branch:</LABEL> <INPUT  onkeypress="return isNumbers(event);"  onblur="Maskup(this,'N',4,0,tBr)" 
+style="WIDTH: 50px" onfocus='Lookin(this,this,"N")' maxLength=4 onchange="Maskup(this,'N',4,0,tBr)" 
+value=0118 name=Branch_No ><INPUT type=hidden value=118 name=tBr><BR>
+<DIV id=AreaAuthor><LABEL><INPUT id=Authorize 
+onclick=NeedAuthorize(this.checked) type=checkbox name=Authorize>Authorize : 
+</LABEL></DIV>
+<HR>
+Account No: <INPUT onkeypress="return isNumbers(event);" 
+onblur="LoadList(Maskup(this,'N',10,0,tactno))" onfocus='Lookin(this,this,"N")' 
+maxLength=10 onchange="CheckType(Maskup(this,'N',10,0,tactno))" name=actno> 
+<INPUT id=tactno type=hidden name=tactno>&nbsp;<LABEL id=showtype>&nbsp;</LABEL> 
+
+<DIV id=workArea></DIV></FORM>
+</BODY></HTML>
